@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% block title %}Start Interview{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+  <div class="container-xl">
+    <div class="hero-grid">
+
+      <!-- ── Left: Hero copy ── -->
+      <div class="hero-text animate-fadeInLeft">
+        <div class="hero-badge mb-3">
+          <i class="bi bi-stars me-2"></i>IBM Granite · watsonx.ai
+        </div>
+        <h1 class="hero-title">
+          Ace Your Next<br />
+          <span class="gradient-text">Interview</span>
+        </h1>
+        <p class="hero-subtitle">
+          Practice with an AI interviewer trained to simulate real Technical, HR, and
+          Mixed interviews. Get instant scored feedback, ideal answers, and a
+          detailed performance report — all powered by IBM Granite models.
+        </p>
+
+        <!-- Stats row -->
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-number">16+</span>
+            <span class="stat-label">Domains</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">3</span>
+            <span class="stat-label">Interview Types</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">Practice Sessions</span>
+          </div>
+        </div>
+
+        <!-- Feature chips -->
+        <div class="feature-chips">
+          <span class="chip"><i class="bi bi-patch-check-fill text-success me-1"></i>Scored Feedback</span>
+          <span class="chip"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Instant Evaluation</span>
+          <span class="chip"><i class="bi bi-graph-up-arrow text-primary me-1"></i>Progress Report</span>
+          <span class="chip"><i class="bi bi-chat-dots-fill text-info me-1"></i>Follow-up Questions</span>
+        </div>
+      </div>
+
+      <!-- ── Right: Configuration form ── -->
+      <div class="config-card animate-fadeInRight" id="configCard">
+        {% if not agent_ready %}
+        <div class="alert alert-warning d-flex align-items-start gap-2 mb-4">
+          <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1"></i>
+          <div>
+            <strong>Agent Offline</strong> — IBM watsonx.ai credentials are not configured.
+            Copy <code>.env.example</code> to <code>.env</code> and add your API key.
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="config-card-header">
+          <i class="bi bi-sliders2 me-2"></i>Configure Your Interview
+        </div>
+
+        <form id="interviewForm" class="config-form" novalidate>
+
+          <!-- Interview Type -->
+          <div class="form-group-custom">
+            <label class="form-label-custom">Interview Type</label>
+            <div class="btn-group-custom" id="interviewTypeGroup">
+              {% for key, label in interview_types.items() %}
+              <input type="radio" class="btn-check" name="interview_type"
+                     id="type_{{ key }}" value="{{ key }}"
+                     {% if key == 'technical' %}checked{% endif %}>
+              <label class="btn-option" for="type_{{ key }}">
+                <i class="bi bi-{% if key == 'technical' %}cpu{% elif key == 'hr' %}people{% else %}shuffle{% endif %} me-1"></i>
+                {{ label.replace(' Interview','').replace('Mixed (Technical + HR)','Mixed') }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Domain -->
+          <div class="form-group-custom">
+            <label class="form-label-custom" for="domainSelect">
+              <i class="bi bi-book me-1"></i>Domain / Subject
+            </label>
+            <select class="form-select form-select-custom" id="domainSelect" name="domain" required>
+              {% for key, label in domains.items() %}
+              <option value="{{ key }}" {% if key == 'python' %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Role -->
+          <div class="form-group-custom">
+            <label class="form-label-custom" for="roleInput">
+              <i class="bi bi-briefcase me-1"></i>Target Role
+            </label>
+            <input type="text" class="form-control form-control-custom" id="roleInput"
+                   name="role" placeholder="e.g. Python Developer, Data Scientist"
+                   value="Software Engineer" maxlength="80" />
+          </div>
+
+          <!-- Experience + Difficulty (side by side) -->
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="form-group-custom mb-0">
+                <label class="form-label-custom">Experience Level</label>
+                <div class="btn-group-vertical-custom">
+                  {% for key, label in experiences.items() %}
+                  <input type="radio" class="btn-check" name="experience"
+                         id="exp_{{ key }}" value="{{ key }}"
+                         {% if key == 'fresher' %}checked{% endif %}>
+                  <label class="btn-option-sm" for="exp_{{ key }}">
+                    <i class="bi bi-{% if key == 'fresher' %}seedling{% else %}person-workspace{% endif %} me-1"></i>
+                    {{ label.split('(')[0].strip() }}
+                  </label>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group-custom mb-0">
+                <label class="form-label-custom">Difficulty</label>
+                <div class="btn-group-vertical-custom">
+                  {% for key, label in difficulties.items() %}
+                  <input type="radio" class="btn-check" name="difficulty"
+                         id="diff_{{ key }}" value="{{ key }}"
+                         {% if key == 'medium' %}checked{% endif %}>
+                  <label class="btn-option-sm diff-{{ key }}" for="diff_{{ key }}">
+                    {{ label.split('(')[0].strip() }}
+                  </label>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Number of Questions -->
+          <div class="form-group-custom">
+            <label class="form-label-custom">
+              <i class="bi bi-list-ol me-1"></i>
+              Number of Questions:
+              <span class="badge bg-primary ms-1" id="qCountBadge">{{ default_questions }}</span>
+            </label>
+            <input type="range" class="form-range range-custom" id="questionCount"
+                   name="total_questions"
+                   min="3" max="{{ max_questions }}" step="1"
+                   value="{{ default_questions }}" />
+            <div class="d-flex justify-content-between text-muted small mt-1">
+              <span>3 (Quick)</span>
+              <span>{{ (max_questions // 2) }} (Standard)</span>
+              <span>{{ max_questions }} (Full)</span>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn-start w-100" id="startBtn">
+            <span class="btn-start-content">
+              <i class="bi bi-play-circle-fill me-2"></i>Start Interview
+            </span>
+            <span class="btn-start-loading d-none">
+              <span class="spinner-border spinner-border-sm me-2"></span>Launching…
+            </span>
+          </button>
+        </form>
+      </div>
+
+    </div><!-- /hero-grid -->
+  </div>
+</div>
+
+<!-- ───────────────────── HOW IT WORKS ───────────────────── -->
+<section class="how-it-works py-5">
+  <div class="container-xl">
+    <h2 class="section-title text-center mb-5">How It Works</h2>
+    <div class="row g-4 justify-content-center">
+      <div class="col-sm-6 col-lg-3">
+        <div class="how-card animate-fadeInUp" style="--delay:0s">
+          <div class="how-icon"><i class="bi bi-gear-fill"></i></div>
+          <div class="how-step">01</div>
+          <h5>Configure</h5>
+          <p>Choose your domain, difficulty, role, and the number of questions.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="how-card animate-fadeInUp" style="--delay:0.1s">
+          <div class="how-icon"><i class="bi bi-chat-left-dots-fill"></i></div>
+          <div class="how-step">02</div>
+          <h5>Interview</h5>
+          <p>Answer questions asked by the AI interviewer one by one in a real chat interface.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="how-card animate-fadeInUp" style="--delay:0.2s">
+          <div class="how-icon"><i class="bi bi-star-fill"></i></div>
+          <div class="how-step">03</div>
+          <h5>Get Scored</h5>
+          <p>Each answer is evaluated instantly — score out of 10, strengths, weaknesses, and ideal answer.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="how-card animate-fadeInUp" style="--delay:0.3s">
+          <div class="how-icon"><i class="bi bi-bar-chart-fill"></i></div>
+          <div class="how-step">04</div>
+          <h5>Review Report</h5>
+          <p>Get a comprehensive report with overall score, grade, recommendations, and hiring verdict.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+<script>
+  // Update question count badge on range input change
+  document.getElementById('questionCount').addEventListener('input', function () {
+    document.getElementById('qCountBadge').textContent = this.value;
+  });
+
+  // Submit form → call /api/start → redirect to /interview
+  document.getElementById('interviewForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const btn   = document.getElementById('startBtn');
+    const form  = e.target;
+
+    // Collect form data
+    const body = {
+      interview_type:  form.querySelector('[name=interview_type]:checked')?.value  || 'technical',
+      domain:          form.querySelector('[name=domain]').value,
+      role:            form.querySelector('[name=role]').value.trim() || 'Software Engineer',
+      experience:      form.querySelector('[name=experience]:checked')?.value       || 'fresher',
+      difficulty:      form.querySelector('[name=difficulty]:checked')?.value       || 'medium',
+      total_questions: parseInt(form.querySelector('[name=total_questions]').value),
+    };
+
+    // Loading state
+    btn.querySelector('.btn-start-content').classList.add('d-none');
+    btn.querySelector('.btn-start-loading').classList.remove('d-none');
+    btn.disabled = true;
+
+    try {
+      const res  = await fetch('/api/start', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to start interview');
+      // Store first message and redirect
+      sessionStorage.setItem('firstMessage', JSON.stringify(data));
+      window.location.href = '/interview';
+    } catch (err) {
+      showToast(err.message, 'danger');
+    } finally {
+      btn.querySelector('.btn-start-content').classList.remove('d-none');
+      btn.querySelector('.btn-start-loading').classList.add('d-none');
+      btn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}

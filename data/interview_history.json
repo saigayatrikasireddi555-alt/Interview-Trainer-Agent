@@ -1,0 +1,184 @@
+[
+  {
+    "total_score": 14,
+    "max_score": 30,
+    "overall_percentage": 46.7,
+    "average_score": 4.7,
+    "grade": "D",
+    "questions_attempted": 3,
+    "overall_summary": "The candidate demonstrated basic knowledge of Python fundamentals but struggled with applying concepts to real-world scenarios. They were able to define and provide examples of simple decorators but lacked depth in explaining their practical applications. With guidance and practice, they have potential for growth. The candidate requires further development in understanding software engineering principles and design patterns.",
+    "top_strengths": [
+      "Correctly defined a decorator",
+      "Provided a concrete example",
+      "Provided executable code"
+    ],
+    "top_weaknesses": [
+      "Lack of understanding of decorators",
+      "Did not explain use cases",
+      "Failure to provide a concrete example of logging usage"
+    ],
+    "improvement_areas": [
+      "Understanding of software engineering principles",
+      "Depth in design patterns",
+      "Applying concepts to real-world scenarios",
+      "Explaining technical concepts clearly",
+      "Providing concrete examples for complex topics"
+    ],
+    "recommendations": [
+      "Practice solving problems on platforms like LeetCode or HackerRank",
+      "Study design patterns and their applications in software engineering",
+      "Work on projects that involve applying Python concepts to real-world problems",
+      "Focus on clearly explaining technical ideas and providing examples",
+      "Review and understand the basics of logging and its importance in software development"
+    ],
+    "hiring_recommendation": "Borderline",
+    "per_question_scores": [
+      8,
+      6,
+      0
+    ],
+    "domain": "python",
+    "difficulty": "easy",
+    "experience": "fresher",
+    "role": "Software Engineer",
+    "completed_at": "2026-07-04T15:23:35.357728Z",
+    "session_id": "f213e7ec-9083-422f-b10b-f496815c4ae6",
+    "interview_type": "technical"
+  },
+  {
+    "total_score": 26,
+    "max_score": 30,
+    "overall_percentage": 86.7,
+    "average_score": 8.7,
+    "grade": "A",
+    "questions_attempted": 3,
+    "overall_summary": "The candidate demonstrated strong foundational knowledge in AI, particularly in search algorithms, and was able to explain complex concepts clearly. They showed a good understanding of Dijkstra's algorithm, A* search, DFS, and BFS, including their purposes, principles, and limitations. However, there were moments where they could have delved deeper into comparisons and additional types of algorithms. The candidate's ability to provide relevant examples was a notable strength. With some refinement in exploring complexities and broader knowledge, they have the potential to excel.",
+    "top_strengths": [
+      "Correctly identified and explained the use of Dijkstra's algorithm and A* search for finding shortest paths in weighted graphs",
+      "Clearly explained the basic principles and purposes of both DFS and BFS, along with relevant examples",
+      "Effectively discussed the limitations of DFS and BFS, providing examples for each"
+    ],
+    "top_weaknesses": [
+      "Could have provided more types of search algorithms beyond the basics",
+      "Lacked a detailed comparison of time complexities between different search algorithms like DFS and BFS",
+      "Did not mention the use of the Bellman-Ford algorithm for handling negative weight edges"
+    ],
+    "improvement_areas": [
+      "Expanding knowledge to include a wider range of search algorithms",
+      "Delving deeper into the analysis of time and space complexities of various algorithms",
+      "Exploring how different algorithms apply to real-world problems and scenarios",
+      "Studying advanced topics such as heuristic search and planning"
+    ],
+    "recommendations": [
+      "Review and practice explaining a variety of search algorithms to improve breadth of knowledge",
+      "Focus on analyzing and comparing the efficiencies (time and space complexity) of different algorithms",
+      "Engage with real-world applications and case studies to deepen understanding of algorithmic uses and limitations",
+      "Pursue learning resources or courses that cover advanced AI topics for further development"
+    ],
+    "hiring_recommendation": "Strong Hire",
+    "per_question_scores": [
+      8,
+      8,
+      10
+    ],
+    "domain": "ai",
+    "difficulty": "easy",
+    "experience": "fresher",
+    "role": "Software Engineer",
+    "completed_at": "2026-07-04T15:20:19.721010Z",
+    "session_id": "bdab0989-11be-4e83-9d9b-30222bf54df8",
+    "interview_type": "technical"
+  },
+  {
+    "total_score": 22,
+    "max_score": 30,
+    "overall_percentage": 73.3,
+    "average_score": 7.3,
+    "grade": "B+",
+    "questions_attempted": 3,
+    "overall_summary": "The candidate demonstrated a good foundation in Python fundamentals, showcasing an understanding of object-oriented programming concepts such as inheritance and method overriding. However, there were areas where the candidate lacked depth and clarity in their explanations, particularly when discussing the benefits and applications of these concepts. With further development and practice, the candidate has the potential to become a proficient software engineer. The candidate's ability to provide simple, relevant examples was a notable strength. Overall, the candidate showed promise but requires additional growth.",
+    "top_strengths": [
+      "Provided a simple example",
+      "Demonstrated method overriding is not necessary for inheritance",
+      "Correctly demonstrated method overriding"
+    ],
+    "top_weaknesses": [
+      "Limited example does not showcase full potential of inheritance",
+      "Lacked a clear definition of OOP",
+      "Did not explicitly explain the concept of inheritance"
+    ],
+    "improvement_areas": [
+      "Developing a deeper understanding of object-oriented programming principles",
+      "Improving ability to explain complex concepts clearly and concisely",
+      "Enhancing knowledge of practical applications and benefits of inheritance and method overriding",
+      "Practicing to provide more comprehensive examples that demonstrate full potential of concepts"
+    ],
+    "recommendations": [
+      "Review and practice explaining key programming concepts in a clear and structured manner",
+      "Engage in projects that apply object-oriented programming principles to real-world problems",
+      "Study and explore different scenarios where inheritance and method overriding are beneficial",
+      "Participate in coding challenges to improve proficiency in Python"
+    ],
+    "hiring_recommendation": "Borderline",
+    "per_question_scores": [
+      6,
+      8,
+      8
+    ],
+    "domain": "python",
+    "difficulty": "easy",
+    "experience": "fresher",
+    "role": "Software Engineer",
+    "completed_at": "2026-07-04T15:12:52.873212Z",
+    "session_id": "b0522029-5b51-44e3-8662-e1b4f90d3733",
+    "interview_type": "technical"
+  },
+  {
+    "total_score": 45,
+    "max_score": 90,
+    "overall_percentage": 50.0,
+    "average_score": 5.0,
+    "grade": "C",
+    "questions_attempted": 9,
+    "overall_summary": "The candidate demonstrated a fair grasp of fundamental concepts related to software engineering in Python but struggled with more advanced topics such as decorators and exception handling. Their ability to recognize the importance of credential verification and understand exponential backoff was notable. However, they lacked depth in their explanations and failed to provide concrete examples or implementations for several questions.",
+    "top_strengths": [
+      "Identified need for credential verification",
+      "Understood the concept of exponential backoff",
+      "Showed basic understanding of decorators"
+    ],
+    "top_weaknesses": [
+      "Failed to implement or explain decorators effectively",
+      "Lacked detail in exception handling",
+      "Did not provide meaningful examples or use cases"
+    ],
+    "improvement_areas": [
+      "Deepening knowledge of advanced Python concepts",
+      "Improving coding skills through practice",
+      "Enhancing problem-solving abilities with real-world examples"
+    ],
+    "recommendations": [
+      "Practice implementing decorators with various use cases",
+      "Focus on developing robust exception handling mechanisms",
+      "Engage in projects that require solving complex problems"
+    ],
+    "hiring_recommendation": "Borderline",
+    "per_question_scores": [
+      0,
+      0,
+      8,
+      8,
+      5,
+      6,
+      6,
+      6,
+      6
+    ],
+    "domain": "python",
+    "difficulty": "medium",
+    "experience": "fresher",
+    "role": "Software Engineer",
+    "completed_at": "2026-07-04T14:47:55.050255Z",
+    "session_id": "e85ddb8d-bc54-4a6f-a194-08cd094a6dfc",
+    "early_end": true
+  }
+]

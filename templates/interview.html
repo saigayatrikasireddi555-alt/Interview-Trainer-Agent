@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}Interview in Progress{% endblock %}
+
+{% block extra_css %}
+<style>
+  .main-content { height: calc(100vh - 64px); display: flex; flex-direction: column; overflow: hidden; }
+  body { overflow: hidden; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="interview-layout" id="interviewLayout">
+
+  <!-- ══════ SIDEBAR ══════ -->
+  <aside class="interview-sidebar" id="interviewSidebar">
+    <!-- Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <i class="bi bi-activity me-2 text-primary"></i>Session
+      </div>
+      <button class="btn btn-sm sidebar-close-btn d-lg-none" id="sidebarClose">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Meta info -->
+    <div class="sidebar-meta px-3 pb-3">
+      <div class="meta-item">
+        <span class="meta-label">Domain</span>
+        <span class="meta-value badge bg-primary" id="metaDomain">—</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Type</span>
+        <span class="meta-value" id="metaType">—</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Difficulty</span>
+        <span class="meta-value difficulty-badge" id="metaDifficulty">—</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Experience</span>
+        <span class="meta-value" id="metaExperience">—</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Role</span>
+        <span class="meta-value text-truncate" id="metaRole">—</span>
+      </div>
+    </div>
+
+    <hr class="sidebar-divider" />
+
+    <!-- Progress -->
+    <div class="px-3 pb-2">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="sidebar-section-label">Progress</span>
+        <span class="fw-semibold text-primary" id="progressText">0 / 0</span>
+      </div>
+      <div class="progress progress-custom mb-3">
+        <div class="progress-bar progress-bar-animated" id="progressBar"
+             role="progressbar" style="width: 0%"></div>
+      </div>
+      <div class="d-flex justify-content-between small text-muted">
+        <span>Avg Score</span>
+        <span id="avgScore" class="fw-semibold">—</span>
+      </div>
+    </div>
+
+    <hr class="sidebar-divider" />
+
+    <!-- Score Timeline -->
+    <div class="px-3 pb-2">
+      <div class="sidebar-section-label mb-2">Score Timeline</div>
+      <div class="score-timeline" id="scoreTimeline">
+        <span class="text-muted small">No answers yet</span>
+      </div>
+    </div>
+
+    <hr class="sidebar-divider" />
+
+    <!-- Actions -->
+    <div class="px-3 pb-3 mt-auto">
+      <button class="btn btn-outline-danger btn-sm w-100" id="endEarlyBtn">
+        <i class="bi bi-stop-circle me-2"></i>End Interview Early
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══════ CHAT AREA ══════ -->
+  <div class="chat-wrapper" id="chatWrapper">
+
+    <!-- Chat topbar -->
+    <div class="chat-topbar">
+      <button class="btn btn-sm sidebar-toggle-btn d-lg-none me-2" id="sidebarToggle">
+        <i class="bi bi-layout-sidebar-inset"></i>
+      </button>
+      <div class="chat-topbar-info">
+        <div class="chat-topbar-title" id="chatTitle">Interview in Progress</div>
+        <div class="chat-topbar-sub">
+          Question <span id="qNumDisplay">0</span> of <span id="qTotalDisplay">0</span>
+        </div>
+      </div>
+      <div class="chat-topbar-status ms-auto">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">Connecting…</span>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-messages-inner" id="chatMessagesInner">
+        <!-- messages injected by JS -->
+        <div class="loading-placeholder" id="loadingPlaceholder">
+          <div class="loading-dot-anim">
+            <span></span><span></span><span></span>
+          </div>
+          <p class="text-muted mt-3">Starting your interview session…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="chat-input-area" id="chatInputArea">
+      <div class="chat-input-inner">
+        <textarea
+          class="chat-textarea" id="answerInput"
+          placeholder="Type your answer here… (Shift+Enter for new line, Enter to submit)"
+          rows="3" disabled></textarea>
+        <div class="chat-input-actions">
+          <div class="char-counter text-muted small" id="charCounter">0 chars</div>
+          <button class="btn btn-send" id="sendBtn" disabled>
+            <i class="bi bi-send-fill"></i>
+            <span class="d-none d-sm-inline ms-1">Send</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /chat-wrapper -->
+</div><!-- /interview-layout -->
+
+<!-- ── Feedback Modal ── -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content modal-custom">
+      <div class="modal-header">
+        <h5 class="modal-title" id="feedbackModalLabel">
+          <i class="bi bi-stars me-2 text-warning"></i>Answer Evaluation
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="feedbackModalBody">
+        <!-- Injected by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-dismiss="modal" id="modalNextBtn">
+          <i class="bi bi-arrow-right me-1"></i>Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── End Early Confirm Modal ── -->
+<div class="modal fade" id="endEarlyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content modal-custom">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-stop-circle text-danger me-2"></i>End Interview?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to end the interview early? A partial report will be generated from your answers so far.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Keep Going</button>
+        <button class="btn btn-danger" id="confirmEndBtn">End & Get Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  window.INTERVIEW_META = {{ session_meta | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+{% endblock %}

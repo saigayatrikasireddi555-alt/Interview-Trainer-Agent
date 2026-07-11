@@ -1,0 +1,134 @@
+{
+  "_comment": "Sample interview questions dataset. Used for reference and offline testing.",
+  "domains": {
+    "python": {
+      "easy": [
+        "What is a Python list and how is it different from a tuple?",
+        "Explain the difference between '==' and 'is' in Python.",
+        "What are Python decorators and how do you use them?",
+        "What is the purpose of __init__ in a Python class?",
+        "How does Python handle memory management?"
+      ],
+      "medium": [
+        "Explain the GIL (Global Interpreter Lock) and its implications for multithreading.",
+        "What are generators and how do they differ from regular functions?",
+        "Describe the differences between shallow copy and deep copy.",
+        "How does Python's garbage collector work?",
+        "Explain metaclasses in Python and when you would use them."
+      ],
+      "hard": [
+        "Design a Python context manager that logs the execution time of a code block.",
+        "Explain asyncio event loops and how they differ from threads and processes.",
+        "How would you implement a custom descriptor protocol in Python?",
+        "Describe how you would optimise a Python application with a memory leak.",
+        "Explain the MRO (Method Resolution Order) in Python's multiple inheritance."
+      ]
+    },
+    "java": {
+      "easy": [
+        "What is the difference between an abstract class and an interface in Java?",
+        "Explain the concept of polymorphism with an example.",
+        "What is the difference between ArrayList and LinkedList?",
+        "What are checked and unchecked exceptions in Java?",
+        "Explain the 'final' keyword in Java."
+      ],
+      "medium": [
+        "Explain the Java memory model — heap, stack, and metaspace.",
+        "What are Java generics and why are they used?",
+        "Describe how HashMap works internally in Java.",
+        "What is the difference between Comparable and Comparator?",
+        "Explain the Java Stream API and its advantages."
+      ],
+      "hard": [
+        "How does the JVM JIT compiler work and how does it optimise bytecode?",
+        "Design a thread-safe singleton pattern in Java using double-checked locking.",
+        "Explain the Fork/Join framework and when you would use it.",
+        "How would you diagnose and fix a deadlock in a Java multithreaded application?",
+        "Describe the differences between ReentrantLock and synchronized."
+      ]
+    },
+    "data_structures": {
+      "easy": [
+        "What is a stack and what are its main operations?",
+        "Explain the difference between a stack and a queue.",
+        "What is a linked list and how does it differ from an array?",
+        "What is a binary tree?",
+        "What is the time complexity of searching in a hash table?"
+      ],
+      "medium": [
+        "Explain the difference between BFS and DFS. When would you use each?",
+        "What is a balanced binary search tree? Give an example.",
+        "Explain how a min-heap works and describe its key operations.",
+        "What is dynamic programming? Explain with an example.",
+        "How does a hash table handle collisions?"
+      ],
+      "hard": [
+        "Design a LRU cache with O(1) get and put operations.",
+        "Explain the differences between B-trees and B+ trees and their use cases.",
+        "How would you find the shortest path in a weighted graph with negative edges?",
+        "Describe the time and space complexities of merge sort vs. quicksort.",
+        "Design a data structure that supports insert, delete, and getRandom in O(1)."
+      ]
+    },
+    "algorithms": {
+      "easy": [
+        "What is Big-O notation? Give examples of O(1), O(n), and O(n²) operations.",
+        "How does binary search work? What is its time complexity?",
+        "Explain bubble sort and its time complexity.",
+        "What is recursion? Give a simple example.",
+        "What is the difference between a greedy algorithm and dynamic programming?"
+      ],
+      "medium": [
+        "Explain the divide-and-conquer paradigm with an example.",
+        "How does merge sort work? Walk through an example.",
+        "Explain Dijkstra's algorithm and its time complexity.",
+        "What is memoisation and how does it relate to dynamic programming?",
+        "Explain the knapsack problem and how dynamic programming solves it."
+      ],
+      "hard": [
+        "Explain the travelling salesman problem and approaches to solve it.",
+        "How does the A* search algorithm work? Where is it best applied?",
+        "Describe the Floyd-Warshall algorithm and its use case.",
+        "What is amortised analysis? Explain with the dynamic array example.",
+        "Design an algorithm to find all strongly connected components in a graph."
+      ]
+    },
+    "machine_learning": {
+      "easy": [
+        "What is the difference between supervised and unsupervised learning?",
+        "Explain what overfitting is and how to prevent it.",
+        "What is a confusion matrix?",
+        "What is the difference between classification and regression?",
+        "What is cross-validation?"
+      ],
+      "medium": [
+        "Explain how gradient descent works.",
+        "What is the bias-variance trade-off?",
+        "Describe how a Random Forest works.",
+        "What is regularisation? Explain L1 and L2.",
+        "How does the backpropagation algorithm work in neural networks?"
+      ],
+      "hard": [
+        "Explain the attention mechanism and its role in transformers.",
+        "How does a GAN (Generative Adversarial Network) work?",
+        "Describe the differences between batch normalisation and layer normalisation.",
+        "How would you handle severe class imbalance in a dataset?",
+        "Explain SHAP values and how they are used for model interpretability."
+      ]
+    },
+    "hr": {
+      "all_levels": [
+        "Tell me about yourself.",
+        "Why do you want to work at this company?",
+        "Describe a challenging project you worked on and how you overcame obstacles.",
+        "Where do you see yourself in five years?",
+        "Tell me about a time you had a conflict with a colleague and how you resolved it.",
+        "What is your greatest professional strength?",
+        "What is an area you are actively working to improve?",
+        "Describe a time when you went above and beyond your job responsibilities.",
+        "How do you handle tight deadlines and pressure?",
+        "Why are you leaving your current role?"
+      ]
+    }
+  }
+}

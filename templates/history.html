@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Interview History{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4 py-lg-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h1 class="page-title mb-1">
+        <i class="bi bi-clock-history me-2 text-primary"></i>Interview History
+      </h1>
+      <p class="text-muted mb-0">
+        {{ records | length }} session{{ 's' if records | length != 1 else '' }} recorded
+      </p>
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-2"></i>New Interview
+    </a>
+  </div>
+
+  {% if records %}
+  <!-- ─── Dashboard Summary ─── -->
+  <div class="row g-3 mb-5 animate-fadeInUp">
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-primary-soft text-primary"><i class="bi bi-list-check"></i></div>
+        <div class="score-stat-value">{{ records | length }}</div>
+        <div class="score-stat-label">Total Sessions</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-success-soft text-success"><i class="bi bi-graph-up-arrow"></i></div>
+        <div class="score-stat-value">
+          {{ (records | selectattr('average_score') | map(attribute='average_score') | list | sum / ([records | selectattr('average_score') | list | length, 1] | max)) | round(1) }}
+          <span class="fs-6">/10</span>
+        </div>
+        <div class="score-stat-label">Avg Score</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-warning-soft text-warning"><i class="bi bi-trophy-fill"></i></div>
+        <div class="score-stat-value">
+          {{ records | selectattr('average_score') | map(attribute='average_score') | list | max | round(1) if records | selectattr('average_score') | list else 0 }}
+          <span class="fs-6">/10</span>
+        </div>
+        <div class="score-stat-label">Best Score</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-info-soft text-info"><i class="bi bi-question-lg"></i></div>
+        <div class="score-stat-value">
+          {{ records | map(attribute='questions_attempted') | list | sum }}
+        </div>
+        <div class="score-stat-label">Total Questions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Records Grid ─── -->
+  <div class="row g-4 animate-fadeInUp" style="--delay:0.1s">
+    {% for i, rec in enumerate(records) %}
+    <div class="col-md-6 col-xl-4">
+      <div class="history-card">
+        <!-- Card Header -->
+        <div class="history-card-header">
+          <div>
+            <div class="history-domain">{{ rec.domain | replace('_',' ') | title }}</div>
+            <div class="history-role text-truncate">{{ rec.role or 'Software Engineer' }}</div>
+          </div>
+          <div class="grade-pill grade-{{ rec.grade | replace('+','plus') | lower }}">
+            {{ rec.grade }}
+          </div>
+        </div>
+        <!-- Card Body -->
+        <div class="history-card-body">
+          <div class="history-row">
+            <span><i class="bi bi-bar-chart-line me-1 text-muted"></i>Score</span>
+            <span class="fw-semibold">{{ rec.average_score }}/10</span>
+          </div>
+          <div class="history-row">
+            <span><i class="bi bi-percent me-1 text-muted"></i>Percentage</span>
+            <span>
+              <span class="badge
+                {% if rec.overall_percentage >= 70 %}bg-success
+                {% elif rec.overall_percentage >= 50 %}bg-warning text-dark
+                {% else %}bg-danger{% endif %}">
+                {{ rec.overall_percentage }}%
+              </span>
+            </span>
+          </div>
+          <div class="history-row">
+            <span><i class="bi bi-question-circle me-1 text-muted"></i>Questions</span>
+            <span>{{ rec.questions_attempted }}</span>
+          </div>
+          <div class="history-row">
+            <span><i class="bi bi-speedometer2 me-1 text-muted"></i>Difficulty</span>
+            <span class="difficulty-badge difficulty-{{ rec.difficulty }}">{{ rec.difficulty | title }}</span>
+          </div>
+          <div class="history-row">
+            <span><i class="bi bi-person-check me-1 text-muted"></i>Verdict</span>
+            <span class="small
+              {% if rec.hiring_recommendation == 'Strong Hire' %}text-success
+              {% elif rec.hiring_recommendation == 'Hire' %}text-primary
+              {% elif rec.hiring_recommendation == 'Borderline' %}text-warning
+              {% else %}text-danger{% endif %} fw-medium">
+              {{ rec.hiring_recommendation }}
+            </span>
+          </div>
+          <div class="history-row border-0 pb-0">
+            <span><i class="bi bi-calendar3 me-1 text-muted"></i>Date</span>
+            <span class="text-muted small">{{ rec.completed_at[:10] if rec.completed_at else '—' }}</span>
+          </div>
+        </div>
+        <!-- Mini score bar -->
+        <div class="history-score-bar">
+          <div class="history-score-fill
+            {% if rec.overall_percentage >= 70 %}bg-success
+            {% elif rec.overall_percentage >= 50 %}bg-warning
+            {% else %}bg-danger{% endif %}"
+            style="width: {{ rec.overall_percentage }}%">
+          </div>
+        </div>
+        <!-- Card Footer -->
+        <div class="history-card-footer">
+          <a href="{{ url_for('history_detail', idx=i) }}" class="btn btn-sm btn-primary flex-grow-1">
+            <i class="bi bi-eye me-1"></i>View Report
+          </a>
+          <button class="btn btn-sm btn-outline-danger delete-history-btn" data-idx="{{ i }}">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <!-- Empty state -->
+  <div class="empty-state animate-fadeInUp">
+    <div class="empty-icon"><i class="bi bi-journal-x"></i></div>
+    <h3>No interview history yet</h3>
+    <p class="text-muted">Complete your first interview to see your performance history and reports here.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary mt-2">
+      <i class="bi bi-play-circle me-2"></i>Start Your First Interview
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Delete history entry
+  document.querySelectorAll('.delete-history-btn').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const idx = this.dataset.idx;
+      if (!confirm('Delete this history entry?')) return;
+      const res = await fetch(`/api/history/${idx}`, { method: 'DELETE' });
+      if (res.ok) location.reload();
+      else showToast('Failed to delete entry', 'danger');
+    });
+  });
+</script>
+{% endblock %}

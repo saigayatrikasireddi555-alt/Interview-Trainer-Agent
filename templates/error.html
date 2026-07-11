@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} Error{% endblock %}
+{% block content %}
+<div class="container-xl py-5 text-center">
+  <div class="empty-state animate-fadeInUp">
+    <div class="empty-icon text-danger"><i class="bi bi-exclamation-octagon"></i></div>
+    <h2 class="mb-2">{{ code }} — {{ 'Page Not Found' if code == 404 else 'Server Error' }}</h2>
+    <p class="text-muted">{{ message }}</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+      <i class="bi bi-house me-2"></i>Back to Home
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% block title %}Interview Report{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4 py-lg-5">
+
+  <!-- ── Back link ── -->
+  <div class="mb-4">
+    {% if is_history %}
+    <a href="{{ url_for('history') }}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i>Back to History
+    </a>
+    {% else %}
+    <a href="{{ url_for('index') }}" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-house me-1"></i>New Interview
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- ── Report Header ── -->
+  <div class="report-header animate-fadeInUp">
+    <div class="report-header-left">
+      <div class="report-badge">Final Report</div>
+      <h1 class="report-title">
+        {{ report.role or 'Software Engineer' }}
+        <span class="text-muted fw-normal fs-4">·</span>
+        {{ report.domain | replace('_', ' ') | title }}
+      </h1>
+      <div class="report-meta-row">
+        <span class="report-meta-chip">
+          <i class="bi bi-calendar3 me-1"></i>
+          {{ report.completed_at[:10] if report.completed_at else 'N/A' }}
+        </span>
+        <span class="report-meta-chip">
+          <i class="bi bi-bar-chart-line me-1"></i>
+          {{ report.difficulty | title }} Difficulty
+        </span>
+        <span class="report-meta-chip">
+          <i class="bi bi-person me-1"></i>
+          {{ report.experience | title }}
+        </span>
+        {% if report.early_end %}
+        <span class="report-meta-chip chip-warning">
+          <i class="bi bi-exclamation-triangle me-1"></i>Ended Early
+        </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Grade circle -->
+    <div class="grade-circle grade-{{ report.grade | replace('+','plus') | lower }}">
+      <span class="grade-letter">{{ report.grade }}</span>
+      <span class="grade-sub">{{ report.overall_percentage }}%</span>
+    </div>
+  </div>
+
+  <!-- ── Score Cards Row ── -->
+  <div class="row g-3 mb-4 animate-fadeInUp" style="--delay:0.1s">
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-primary-soft text-primary"><i class="bi bi-trophy-fill"></i></div>
+        <div class="score-stat-value">{{ report.average_score }}<span class="fs-6">/10</span></div>
+        <div class="score-stat-label">Avg Score</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-success-soft text-success"><i class="bi bi-patch-check-fill"></i></div>
+        <div class="score-stat-value">{{ report.total_score }}<span class="fs-6">/{{ report.max_score }}</span></div>
+        <div class="score-stat-label">Total Score</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon bg-info-soft text-info"><i class="bi bi-question-circle-fill"></i></div>
+        <div class="score-stat-value">{{ report.questions_attempted }}</div>
+        <div class="score-stat-label">Questions</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="score-stat-card">
+        <div class="score-stat-icon
+          {% if report.hiring_recommendation == 'Strong Hire' %}bg-success-soft text-success
+          {% elif report.hiring_recommendation == 'Hire' %}bg-primary-soft text-primary
+          {% elif report.hiring_recommendation == 'Borderline' %}bg-warning-soft text-warning
+          {% else %}bg-danger-soft text-danger{% endif %}">
+          <i class="bi bi-person-check-fill"></i>
+        </div>
+        <div class="score-stat-value fs-5 text-center">{{ report.hiring_recommendation }}</div>
+        <div class="score-stat-label">Verdict</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main two-column layout ── -->
+  <div class="row g-4 animate-fadeInUp" style="--delay:0.15s">
+
+    <!-- LEFT column -->
+    <div class="col-lg-7">
+
+      <!-- Overall Summary -->
+      <div class="report-card mb-4">
+        <div class="report-card-header">
+          <i class="bi bi-file-text-fill me-2 text-primary"></i>Overall Summary
+        </div>
+        <div class="report-card-body">
+          <p class="mb-0">{{ report.overall_summary }}</p>
+        </div>
+      </div>
+
+      <!-- Strengths & Weaknesses -->
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6">
+          <div class="report-card h-100">
+            <div class="report-card-header text-success">
+              <i class="bi bi-hand-thumbs-up-fill me-2"></i>Top Strengths
+            </div>
+            <div class="report-card-body">
+              {% if report.top_strengths %}
+              <ul class="feedback-list">
+                {% for s in report.top_strengths %}
+                <li class="feedback-item feedback-strength">
+                  <i class="bi bi-check-circle-fill me-2"></i>{{ s }}
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p class="text-muted mb-0">No strengths recorded.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="report-card h-100">
+            <div class="report-card-header text-danger">
+              <i class="bi bi-exclamation-circle-fill me-2"></i>Weaknesses
+            </div>
+            <div class="report-card-body">
+              {% if report.top_weaknesses %}
+              <ul class="feedback-list">
+                {% for w in report.top_weaknesses %}
+                <li class="feedback-item feedback-weakness">
+                  <i class="bi bi-x-circle-fill me-2"></i>{{ w }}
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p class="text-muted mb-0">No major weaknesses detected.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Improvement Areas -->
+      <div class="report-card mb-4">
+        <div class="report-card-header text-warning">
+          <i class="bi bi-arrow-up-circle-fill me-2"></i>Improvement Areas
+        </div>
+        <div class="report-card-body">
+          {% if report.improvement_areas %}
+          <ul class="feedback-list">
+            {% for area in report.improvement_areas %}
+            <li class="feedback-item feedback-improvement">
+              <i class="bi bi-arrow-right-circle me-2"></i>{{ area }}
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted mb-0">No specific improvement areas noted.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="report-card">
+        <div class="report-card-header text-info">
+          <i class="bi bi-lightbulb-fill me-2"></i>Recommendations
+        </div>
+        <div class="report-card-body">
+          {% if report.recommendations %}
+          <ul class="feedback-list">
+            {% for rec in report.recommendations %}
+            <li class="feedback-item feedback-recommendation">
+              <i class="bi bi-bookmark-check me-2"></i>{{ rec }}
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted mb-0">No recommendations available.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div><!-- /col-lg-7 -->
+
+    <!-- RIGHT column -->
+    <div class="col-lg-5">
+
+      <!-- Score Chart -->
+      <div class="report-card mb-4">
+        <div class="report-card-header">
+          <i class="bi bi-graph-up me-2 text-primary"></i>Score Per Question
+        </div>
+        <div class="report-card-body" style="position:relative; height:240px;">
+          <canvas id="scoreChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Donut / percentage chart -->
+      <div class="report-card mb-4">
+        <div class="report-card-header">
+          <i class="bi bi-pie-chart-fill me-2 text-success"></i>Performance Breakdown
+        </div>
+        <div class="report-card-body d-flex justify-content-center" style="height:200px;">
+          <canvas id="donutChart"></canvas>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="d-grid gap-2">
+        <a href="{{ url_for('index') }}" class="btn btn-primary">
+          <i class="bi bi-arrow-counterclockwise me-2"></i>Start New Interview
+        </a>
+        <a href="{{ url_for('history') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-clock-history me-2"></i>View All History
+        </a>
+        <button class="btn btn-outline-secondary" onclick="window.print()">
+          <i class="bi bi-printer me-2"></i>Print Report
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // ── Score per-question bar chart ──
+  (function () {
+    const scores = {{ report.per_question_scores | tojson }};
+    if (!scores.length) return;
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: scores.map((_, i) => 'Q' + (i + 1)),
+        datasets: [{
+          label: 'Score',
+          data: scores,
+          backgroundColor: scores.map(s =>
+            s >= 8 ? 'rgba(34,197,94,0.7)' :
+            s >= 6 ? 'rgba(59,130,246,0.7)' :
+            s >= 4 ? 'rgba(251,191,36,0.7)' :
+                     'rgba(239,68,68,0.7)'
+          ),
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { min: 0, max: 10, ticks: { stepSize: 2 }, grid: { color: 'rgba(128,128,128,0.15)' } },
+          x: { grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  })();
+
+  // ── Donut chart ──
+  (function () {
+    const pct = {{ report.overall_percentage }};
+    const ctx  = document.getElementById('donutChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Scored', 'Remaining'],
+        datasets: [{
+          data: [pct, 100 - pct],
+          backgroundColor: [
+            pct >= 70 ? 'rgba(34,197,94,0.8)' : pct >= 50 ? 'rgba(251,191,36,0.8)' : 'rgba(239,68,68,0.8)',
+            'rgba(128,128,128,0.15)'
+          ],
+          borderWidth: 0, hoverOffset: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '72%',
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.parsed}%` } }
+        }
+      }
+    });
+  })();
+</script>
+{% endblock %}
